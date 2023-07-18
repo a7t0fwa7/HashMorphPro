@@ -1,14 +1,31 @@
 # HashMorphPro
-"Hash Morph Pro" is an enhanced version of the original Hash Morpher code. It includes additional features and improvements that make it more versatile and effective in a wider range of scenarios.
 
-Here's a detailed description of what this code does differently compared to the original one:
+Is an alternate version of the original Hash Morpher code by [oh-az](https://github.com/oh-az/HashMorpher). It includes a couple of improvements:
 
-File Morphing: The original code only appended two random bytes at the end of the file. The new code, however, inserts a random number of bytes at a random position within the file. This results in a wider range of hash values for the same file, making it harder to detect the morphed files.
+1. **Morphing Functionality** : The original HashMorpher code added two random bytes at the end of the copied file. The new Hash Morph Pro code adds a random number of bytes (up to 1024) at the end of the copied file. This increases the variability of the morphed files, making them less likely to be detected by simple hash-based file integrity checks.
+2. **Directory Morphing** : The new code introduces a feature to morph all executable files (.exe, .dll, .ps1) in a specified directory. This is another enhancement over the original code, which could only morph a single file at a time.
 
-Automation: The original code required manual selection of a file to morph. The new code, on the other hand, can automatically target specific types of files or directories. For example, it could target executables or scripts commonly used by antivirus or intrusion detection systems. This feature enhances the code's usability and efficiency.
+## Compiling and Usage
 
-Enhanced Randomization: The new code introduces enhanced randomization by varying the number of bytes appended and the location where they're inserted. This increases the unpredictability of the hash values, making it more challenging for detection systems to identify the morphed files.
+1. **Compile the Program** : In a Windows Terminal, compile the program using a C compiler. If you're using GCC, the command would be `gcc -o hashmorphpro.exe hashmorphpro.c`pp. This will create an executable named `hashmorphpro`.exe.
+2. **Run the Program** : Run the program by typing `./hashmorphpro`.exe in the terminal.
+3. **Choose an Option** : The program will display a menu with five options:
 
-Directory Targeting: The new code can target all files in a directory that have a specific file extension (e.g., .exe, .dll, .ps1). This feature allows for bulk file morphing, which can be particularly useful in scenarios where multiple files need to be morphed at once.
+* 1: CMD
+* 2: Powershell
+* 3: Powershell_ise
+* 4: Custom path
+* 5: Morph all files in a directory
 
-In summary, "Hash Morph Pro" provides a more sophisticated and versatile approach to file morphing, making it a valuable tool for both offensive and defensive cybersecurity operations.
+   Enter the number corresponding to your choice and press Enter.
+
+1. **Enter Source Path or Directory Path** :
+
+* If you chose options 1-3, the program will use a predefined source path.
+* If you chose option 4, you will be prompted to enter a custom source path. Type the full path to the file you want to morph and press Enter.
+* If you chose option 5, you will be prompted to enter a directory path. Type the full path to the directory containing the files you want to morph and press Enter.
+
+1. **Enter Destination Path** : If you chose options 1-4, you will be prompted to enter a destination path. This is where the morphed file will be saved. If you want to save the morphed file in the current directory, just press Enter without typing anything. Otherwise, type the full path to the destination directory and press Enter.
+2. **View Results** : The program will attempt to morph the file(s) based on your choices. If successful, it will display the full path of the morphed file(s) and calculate the hash values of the original and morphed file(s).
+
+Remember, this program modifies binary files in a way that changes their hash values but keeps them executable. Always use caution when handling executable files, and only use this program for legitimate purposes.

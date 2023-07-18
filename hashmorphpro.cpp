@@ -13,37 +13,31 @@
 #define ANSI_COLOR_RESET   "\x1b[0m"
 
 bool morphFile(const char* sourcePath, const char* destinationPath) {
-    FILE* source = fopen(sourcePath, "rb");
-    FILE* destination = fopen(destinationPath, "wb");
-    if (!source || !destination) {
+    // Copy the source file to the destination
+    if (!copyFile(sourcePath, destinationPath)) {
         return false;
     }
-    size_t bytesRead;
-    char buffer[4096];
-    while ((bytesRead = fread(buffer, 1, sizeof(buffer), source)) > 0) {
-        fwrite(buffer, 1, bytesRead, destination);
-    }
-    fclose(source);
-    fclose(destination);
 
-    destination = fopen(destinationPath, "r+b");
+    // Open the destination file
+    FILE* destination = fopen(destinationPath, "r+b");
     if (!destination) {
         return false;
     }
 
+    // Seek to the end of the file
     fseek(destination, 0, SEEK_END);
-    long fileSize = ftell(destination);
 
+    // Generate a random number of bytes (within a reasonable range to avoid making the file too large)
     int randomBytes = rand() % 1024;
-    int randomPosition = rand() % fileSize;
 
-    fseek(destination, randomPosition, SEEK_SET);
+    // Insert the random bytes at the end of the file (in the overlay)
     char randomData[randomBytes];
     for (int i = 0; i < randomBytes; i++) {
         randomData[i] = rand() % 256;
     }
     fwrite(randomData, 1, randomBytes, destination);
 
+    // Close the file handle
     fclose(destination);
 
     return true;
@@ -98,7 +92,8 @@ int main() {
     printf("1: CMD\n");
     printf("2: Powershell\n");
     printf("3: Powershell_ise\n");
-    printf("4: Custom path\n\n");
+    printf("4: Custom path\n");
+    printf("5: Morph all files in a directory\n\n");
     printf("#  ");
     printf(ANSI_COLOR_RESET);
     scanf_s("%d", &choice);
@@ -121,6 +116,14 @@ int main() {
         scanf_s("%s", customSourcePath, sizeof(customSourcePath));
         sourcePath = customSourcePath;
         break;
+    case 5:
+        printf(ANSI_COLOR_GREEN);
+        printf("Enter directory path: ");
+        printf(ANSI_COLOR_RESET);
+        char directoryPath[MAX_PATH];
+        scanf_s("%s", directoryPath, sizeof(directoryPath));
+        morphFilesInDirectory(directoryPath);
+        return 0;
     default:
         printf(ANSI_COLOR_RED);
         printf("Invalid choice.\n");
@@ -190,3 +193,4 @@ int main() {
 
     return 0;
 }
+
